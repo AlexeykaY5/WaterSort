@@ -18,3 +18,4 @@ MonoBehaviour:
   numberOfEmptyTubes: 2
   timer: 180
   bonusTime: 30
+  difficultyName: Hard Level

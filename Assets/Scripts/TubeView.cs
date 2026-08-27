@@ -6,8 +6,9 @@ public class TubeView : MonoBehaviour
 {
     public Image[] slots;
     public Color[] colors;
-    public int tubeIndex;
-    public Board board;
+    private int tubeIndex;
+    private Board board;
+    public RectTransform rectTransform;
 
     public void Render(Tube tube)
     {
@@ -24,6 +25,23 @@ public class TubeView : MonoBehaviour
             {
                 slots[i].color = Color.clear;
             }
+        }
+    }
+
+    private void OnClick()
+    {
+        board.OnTubeClicked(tubeIndex);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        if (selected)
+        {
+            rectTransform.anchoredPosition = new Vector2(0, 30f);
+        }
+        else
+        {
+            rectTransform.anchoredPosition = Vector2.zero;
         }
     }
 

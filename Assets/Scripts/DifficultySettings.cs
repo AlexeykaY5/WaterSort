@@ -11,4 +11,5 @@ public class DifficultySettings : ScriptableObject
     public int numberOfEmptyTubes = 2;
     public int timer = 90;
     public int bonusTime = 30;
+    public string difficultyName;
 }

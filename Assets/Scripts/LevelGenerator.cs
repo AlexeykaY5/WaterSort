@@ -6,14 +6,15 @@ public static class LevelGenerator
     public static Tube[] Generate(DifficultySettings settings)
     {
         int totalTubes = settings.numberOfFilledTubes + settings.numberOfEmptyTubes;
-        int numberOfColors = settings.numberOfColors;
         int numberOfColorsInTube = settings.numberOfColorsInTube;
 
         Tube[] tubes = new Tube[totalTubes];
+
         List<WaterColor> waterColors = new List<WaterColor>();
+
         for(int i = 0; i < settings.numberOfColors; i++)
         {
-            for(int j = 0; j < settings.numberOfColorsInTube; j++)
+            for(int j = 0; j < numberOfColorsInTube; j++)
             {
                 waterColors.Add((WaterColor)i);
             }

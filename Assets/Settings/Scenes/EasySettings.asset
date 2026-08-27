@@ -18,3 +18,4 @@ MonoBehaviour:
   numberOfEmptyTubes: 2
   timer: 90
   bonusTime: 30
+  difficultyName: Easy Level

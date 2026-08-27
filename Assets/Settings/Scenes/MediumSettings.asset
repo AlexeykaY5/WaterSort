@@ -18,3 +18,4 @@ MonoBehaviour:
   numberOfEmptyTubes: 2
   timer: 120
   bonusTime: 30
+  difficultyName: Medium Level
