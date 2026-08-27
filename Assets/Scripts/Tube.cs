@@ -74,8 +74,6 @@ public class Tube
 
     public bool CanPourInto(Tube other)
     {
-        //WaterColor? thisTop = this.TopColor();
-        //WaterColor? otherTop = other.TopColor();
         if (this.IsEmpty())
         {
             return false;
@@ -86,10 +84,6 @@ public class Tube
         {
             return false;
         }
-        //else if(thisTop != otherTop)
-        //{
-        //    return false;
-        //}
         return true;
     }
 
