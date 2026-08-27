@@ -1053,7 +1053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7912be2fc7dab63439a25b153442e91c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Test
-  settings: {fileID: 11400000, guid: d8beb18c786ac364c8bf40bb9c372185, type: 2}
 --- !u!114 &535888126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3289,10 +3288,10 @@ RectTransform:
   - {fileID: 321627310}
   m_Father: {fileID: 1201683645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1970617368
 MonoBehaviour:
