@@ -1238,6 +1238,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5b008919d2b6840a61d231b71f41fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
+  difficultySettings:
+  - {fileID: 11400000, guid: d8beb18c786ac364c8bf40bb9c372185, type: 2}
+  - {fileID: 11400000, guid: 905ad283340eb704280e22f14ea82edc, type: 2}
+  - {fileID: 11400000, guid: 26bcf55e2b0299442a2a25f542434ac0, type: 2}
+  canvas: {fileID: 1201683644}
   cards:
   - {fileID: 1847364906}
   - {fileID: 150871811}
@@ -4617,7 +4622,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1984635334}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 513696536}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1984635334
 MonoBehaviour:
   m_ObjectHideFlags: 0

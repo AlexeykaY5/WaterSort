@@ -2,11 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MenuController : MonoBehaviour
+public class MenuController : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    public interface IStartDragHandler { };
-    public interface IDragHandler { };
-    public interface IEndDragHandler { };
+    public DifficultySettings[] difficultySettings;
     public Canvas canvas;
     private float touch;
     private bool isDragging;
@@ -18,8 +16,24 @@ public class MenuController : MonoBehaviour
     public TextMeshProUGUI difficultyText;
     public TextMeshProUGUI record;
     public Board board;
-    private int difficulty = 0;
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        isDragging = true;
+        touch = offset;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        float razn = (eventData.position.x - eventData.pressPosition.x) / canvas.scaleFactor;
+        offset = touch - razn;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        isDragging = false;
+        target = Mathf.Round(offset / step) * step;
+    }
     private float PositiveMod(float value, float length)
     {
         float mod = value % length;
@@ -53,9 +67,21 @@ public class MenuController : MonoBehaviour
         target -= step;
     }
 
+    public void Play()
+    {
+        int difficulty = Mathf.RoundToInt(target / step);
+
+        difficulty = (int)PositiveMod(difficulty, difficultySettings.Length);
+
+        board.StartGame(difficultySettings[difficulty]);
+    }
+
     private void Update()
     {
-        offset = Mathf.Lerp(offset, target, smoothSpeed * Time.deltaTime);
+        if (!isDragging)
+        {
+            offset = Mathf.Lerp(offset, target, smoothSpeed * Time.deltaTime);
+        }
         SetPosition();
     }
 }
