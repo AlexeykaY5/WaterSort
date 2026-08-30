@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,8 +14,7 @@ public class MenuController : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     private float offset;
     private float target = 0f;
     private float smoothSpeed = 10f;
-    public TextMeshProUGUI difficultyText;
-    public TextMeshProUGUI record;
+    public TextMeshProUGUI[] records;
     public Board board;
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -74,6 +74,22 @@ public class MenuController : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
         difficulty = (int)PositiveMod(difficulty, difficultySettings.Length);
 
         board.StartGame(difficultySettings[difficulty]);
+    }
+
+    private void OnEnable()
+    {
+        for (int i = 0; i < difficultySettings.Length; i++)
+        {
+            string difficultyName = difficultySettings[i].difficultyName;
+            if (Records.HasRecord(difficultyName))
+            {
+                records[i].text = TimeFormat.ToMinutesSeconds(Records.GetRecord(difficultyName));
+            }
+            else
+            {
+                records[i].text = " - ";
+            }
+        }
     }
 
     private void Update()

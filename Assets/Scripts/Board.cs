@@ -122,6 +122,8 @@ public class Board : MonoBehaviour
     {
         gameTimer.StopTimer();
 
+        Records.TrySetRecord(settings.difficultyName, gameTimer.TimeLeft);
+
         screenManager.ShowWinPanel();
     }
 
