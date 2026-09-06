@@ -33,11 +33,7 @@ public class GameTimer : MonoBehaviour
 
     private void UpdateTimerText()
     {
-        int totalSeconds = Mathf.CeilToInt(TimeLeft);
-        int minutes = totalSeconds / 60;
-        int seconds = totalSeconds % 60;
-        timerText.text = $"{minutes:00}:{seconds:00}";
-
+        timerText.text = TimeFormat.ToMinutesSeconds(TimeLeft);
     }
 
     void Update()

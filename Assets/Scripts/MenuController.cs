@@ -1,21 +1,22 @@
 using TMPro;
-using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MenuController : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     public DifficultySettings[] difficultySettings;
-    public Canvas canvas;
-    private float touch;
-    private bool isDragging;
     public RectTransform[] cards;
+    public TextMeshProUGUI[] records;
+    public Canvas canvas;
+    public Board board;
+
     private float step = 1000f;
     private float offset;
     private float target = 0f;
     private float smoothSpeed = 10f;
-    public TextMeshProUGUI[] records;
-    public Board board;
+    
+    private bool isDragging;
+    private float touch;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
