@@ -4,7 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DifficultySettings", menuName = "WaterSort/DifficultySettings")]
 public class DifficultySettings : ScriptableObject
 {
-
     public int numberOfColors = 8;
     public int numberOfColorsInTube = 4;
     public int numberOfFilledTubes = 3;

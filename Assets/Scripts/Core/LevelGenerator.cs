@@ -9,7 +9,6 @@ public static class LevelGenerator
         int numberOfColorsInTube = settings.numberOfColorsInTube;
 
         Tube[] tubes = new Tube[totalTubes];
-
         List<WaterColor> waterColors = new List<WaterColor>();
 
         for(int i = 0; i < settings.numberOfColors; i++)

@@ -2,14 +2,15 @@ using UnityEngine;
 using TMPro;
 using System;
 
-
 public class GameTimer : MonoBehaviour
 {
 
-    public event Action TimeUp;
-    public TextMeshProUGUI timerText;
-    public bool isTimePassed = false;
+    [SerializeField] private TextMeshProUGUI timerText;
+
     public float TimeLeft { get; private set; }
+    public event Action TimeUp;
+    public bool isTimePassed = false;
+    
     private bool isRunning = false;
 
     public void StartTimer(int time)
@@ -36,7 +37,7 @@ public class GameTimer : MonoBehaviour
         timerText.text = TimeFormat.ToMinutesSeconds(TimeLeft);
     }
 
-    void Update()
+    private void Update()
     {
         if (!isRunning)
         {

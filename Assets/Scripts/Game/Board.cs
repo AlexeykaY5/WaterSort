@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    [SerializeField] TextMeshProUGUI difficultyText;
+    [SerializeField] GameTimer gameTimer;
+    [SerializeField] TubeView tubeViewPrefab;
+    [SerializeField] Transform tubeContainer;
+    [SerializeField] ScreenManager screenManager;
+
     private DifficultySettings settings;
-    public TextMeshProUGUI difficultyText;
-    public GameTimer gameTimer;
-    public TubeView tubeViewPrefab;
-    public Transform tubeContainer;
-    public ScreenManager screenManager;
     private HashSet<WaterColor> visitedColors = new HashSet<WaterColor>();
     private Tube[] tubes;
     private TubeView[] tubeViews;
@@ -41,8 +42,8 @@ public class Board : MonoBehaviour
         {
             TubeView view = Instantiate(tubeViewPrefab, tubeContainer);
 
-            view.Init(i, this);
-
+            view.Init(i);
+            view.Clicked += OnTubeClicked;
             tubeViews[i] = view;
             view.Render(tubes[i]);
 
@@ -59,7 +60,7 @@ public class Board : MonoBehaviour
 
         if (selectedIndex == -1)
         {
-            if(!tubes[tubeIndex].IsEmpty())
+            if(!tubes[tubeIndex].IsEmpty)
             {
                 tubeViews[tubeIndex].SetSelected(true);
                 selectedIndex = tubeIndex;
@@ -98,7 +99,7 @@ public class Board : MonoBehaviour
     {
         for(int i = 0; i < tubes.Length; i++)
         {
-            if (!tubes[i].IsSingleColor() && !tubes[i].IsEmpty())
+            if (!tubes[i].IsSingleColor() && !tubes[i].IsEmpty)
             {
                 return false;
             }

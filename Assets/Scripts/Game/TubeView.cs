@@ -1,14 +1,30 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class TubeView : MonoBehaviour
 {
-    public Image[] slots;
-    public Color[] colors;
+
+    [SerializeField] private Image[] slots;
+    [SerializeField] private Color[] colors;
+    [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private Button button;
+
     private int tubeIndex;
-    private Board board;
-    public RectTransform rectTransform;
+
+    public event Action<int> Clicked;
+
+
+    private void Awake()
+    {
+        button.onClick.AddListener(OnClick);
+    }
+
+    private void OnDestroy()
+    {
+        button.onClick.RemoveListener(OnClick);
+    }
 
     public void Render(Tube tube)
     {
@@ -30,7 +46,7 @@ public class TubeView : MonoBehaviour
 
     private void OnClick()
     {
-        board.OnTubeClicked(tubeIndex);
+        Clicked?.Invoke(tubeIndex);
     }
 
     public void SetSelected(bool selected)
@@ -45,10 +61,8 @@ public class TubeView : MonoBehaviour
         }
     }
 
-    public void Init(int tubeIndex, Board board)
+    public void Init(int tubeIndex)
     {
         this.tubeIndex = tubeIndex;
-        this.board = board;
-        GetComponent<Button>().onClick.AddListener(OnClick);
     }
 }

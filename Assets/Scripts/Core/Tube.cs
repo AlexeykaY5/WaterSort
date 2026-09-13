@@ -22,24 +22,15 @@ public class Tube
         this.contents.AddRange(initialContents);
     }
 
-    public bool IsFull()
-    {
-        return contents.Count >= capacity;
-    }
+    private bool IsFull => contents.Count >= capacity;
 
-    public bool IsEmpty()
-    {
-        return contents.Count == 0;
-    }
+    public bool IsEmpty => contents.Count == 0;
 
-    public int FreeSpace()
-    {
-        return capacity - contents.Count;
-    }
-    
+    private int FreeSpace => capacity - contents.Count;
+
     public WaterColor? TopColor()
     {
-        if (IsEmpty())
+        if (IsEmpty)
         {
             return null;
         }
@@ -51,7 +42,7 @@ public class Tube
 
     public int TopGroupSize()
     {
-        if (IsEmpty())
+        if (IsEmpty)
         {
             return 0;
         }
@@ -74,10 +65,10 @@ public class Tube
 
     public bool CanPourInto(Tube other)
     {
-        if (this.IsEmpty())
+        if (this.IsEmpty)
         {
             return false;
-        }else if (other.IsFull())
+        }else if (other.IsFull)
         {
             return false;
         }else if(this == other)
@@ -95,7 +86,7 @@ public class Tube
             return 0;
         }
 
-        int result =  Math.Min(this.TopGroupSize(), other.FreeSpace());
+        int result =  Math.Min(this.TopGroupSize(), other.FreeSpace);
         WaterColor topColor = this.TopColor().Value;
 
         for(int i = 0; i < result; i++)
@@ -108,7 +99,7 @@ public class Tube
 
     public bool IsSingleColor()
     {
-        if (!IsFull())
+        if (!IsFull)
         {
             return false;
         }

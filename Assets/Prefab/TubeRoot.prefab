@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 3893140910903781971}
   - component: {fileID: 2392142021757916254}
   - component: {fileID: 3214031110217156854}
-  - component: {fileID: 2902801208818400162}
   - component: {fileID: 2418873254952679252}
+  - component: {fileID: 2902801208818400162}
   m_Layer: 5
   m_Name: TubeRoot
   m_TagString: Untagged
@@ -78,33 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2902801208818400162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 123807184236372676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9723bfb0d00d734181c8c288e514d1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TubeView
-  slots:
-  - {fileID: 5591252591740918011}
-  - {fileID: 7368819161931919803}
-  - {fileID: 8533739508719982287}
-  - {fileID: 7632229879456120874}
-  colors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0.8867924, b: 0.11460105, a: 1}
-  - {r: 0, g: 0.3131261, b: 1, a: 1}
-  - {r: 1, g: 0.8518007, b: 0, a: 1}
-  - {r: 0.8469534, g: 0, b: 1, a: 1}
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 0.63569504, b: 0, a: 1}
-  rectTransform: {fileID: 5410199454214550172}
 --- !u!114 &2418873254952679252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +122,34 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2902801208818400162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 123807184236372676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9723bfb0d00d734181c8c288e514d1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TubeView
+  slots:
+  - {fileID: 5591252591740918011}
+  - {fileID: 7368819161931919803}
+  - {fileID: 8533739508719982287}
+  - {fileID: 7632229879456120874}
+  colors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.8867924, b: 0.11460105, a: 1}
+  - {r: 0, g: 0.3131261, b: 1, a: 1}
+  - {r: 1, g: 0.8518007, b: 0, a: 1}
+  - {r: 0.8469534, g: 0, b: 1, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.63569504, b: 0, a: 1}
+  rectTransform: {fileID: 5410199454214550172}
+  button: {fileID: 2418873254952679252}
 --- !u!1 &3401292709977463382
 GameObject:
   m_ObjectHideFlags: 0
