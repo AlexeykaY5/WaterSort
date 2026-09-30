@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69183310043c2f34abe1ff95f713d216, type: 3}
   m_Name: MediumSettings
   m_EditorClassIdentifier: Assembly-CSharp::DifficultySettings
+  id: medium
   numberOfColors: 5
-  numberOfColorsInTube: 4
-  numberOfFilledTubes: 5
+  tubeCapacity: 4
   numberOfEmptyTubes: 2
   timer: 120
   bonusTime: 30

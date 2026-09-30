@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69183310043c2f34abe1ff95f713d216, type: 3}
   m_Name: HardSettings
   m_EditorClassIdentifier: Assembly-CSharp::DifficultySettings
+  id: hard
   numberOfColors: 8
-  numberOfColorsInTube: 4
-  numberOfFilledTubes: 8
+  tubeCapacity: 4
   numberOfEmptyTubes: 2
   timer: 180
   bonusTime: 30

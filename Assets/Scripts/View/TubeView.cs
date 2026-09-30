@@ -5,16 +5,17 @@ using System.Collections.Generic;
 
 public class TubeView : MonoBehaviour
 {
-
-    [SerializeField] private Image[] slots;
-    [SerializeField] private Color[] colors;
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Button button;
+    [SerializeField] private Image slotPrefab;
+    [SerializeField] private RectTransform slotsContainer;
+
 
     private int tubeIndex;
 
-    public event Action<int> Clicked;
+    private List<Image> slots = new List<Image>();
 
+    public event Action<int> Clicked;
 
     private void Awake()
     {
@@ -26,16 +27,31 @@ public class TubeView : MonoBehaviour
         button.onClick.RemoveListener(OnClick);
     }
 
-    public void Render(Tube tube)
+    public void Build(int capacity)
     {
-        List<WaterColor> contents = tube.GetContents();
-
-        for(int i = 0; i < slots.Length; i++)
+        foreach(Image slot in slots)
         {
-            int level = slots.Length - 1 - i;
-            if(contents.Count > level)
+            Destroy(slot.gameObject);
+        }
+
+        slots.Clear();
+
+        for(int i = 0; i < capacity; i++)
+        {
+            Image slot = Instantiate(slotPrefab, slotsContainer);
+            slots.Add(slot);
+        }
+    }
+
+    public void Render(IReadOnlyList<Color> tubeColors)
+    {
+
+        for(int i = 0; i < slots.Count; i++)
+        {
+            int level = slots.Count - 1 - i;
+            if(tubeColors.Count > level)
             {
-                slots[i].color = colors[(int)contents[level]];
+                slots[i].color = tubeColors[level];
             }
             else
             {

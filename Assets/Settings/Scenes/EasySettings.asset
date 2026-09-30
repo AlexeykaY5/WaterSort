@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69183310043c2f34abe1ff95f713d216, type: 3}
   m_Name: EasySettings
   m_EditorClassIdentifier: Assembly-CSharp::DifficultySettings
-  numberOfColors: 3
-  numberOfColorsInTube: 4
-  numberOfFilledTubes: 3
+  id: easy
+  numberOfColors: 4
+  tubeCapacity: 3
   numberOfEmptyTubes: 2
-  timer: 90
+  timer: 300
   bonusTime: 30
   difficultyName: Easy Level

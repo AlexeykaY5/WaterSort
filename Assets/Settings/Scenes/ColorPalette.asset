@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2db22785acb76664683d548f978cfee8, type: 3}
+  m_Name: ColorPalette
+  m_EditorClassIdentifier: Assembly-CSharp::ColorPalette
+  entries:
+  - name: red
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: green
+    color: {r: 0.08167672, g: 1, b: 0, a: 1}
+  - name: blue
+    color: {r: 0, g: 0.18304133, b: 1, a: 1}
+  - name: yellow
+    color: {r: 1, g: 0.9292665, b: 0, a: 1}
+  - name: purple
+    color: {r: 0.74685574, g: 0, b: 1, a: 1}
+  - name: black
+    color: {r: 0, g: 0, b: 0, a: 1}
+  - name: white
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - name: orange
+    color: {r: 1, g: 0.4828682, b: 0, a: 1}
+  - name: darkGreen
+    color: {r: 0.09395612, g: 0.3301887, b: 0, a: 1}
+  - name: grey
+    color: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+  - name: bl
+    color: {r: 0, g: 1, b: 0.6851115, a: 1}
