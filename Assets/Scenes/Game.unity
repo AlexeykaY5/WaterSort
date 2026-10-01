@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &131697026
 RectTransform:
   m_ObjectHideFlags: 0
@@ -515,11 +515,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d4eadb7f4344664b88bbe8965a2d062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Board
-  gameOverView: {fileID: 131697029}
-  fallbackDifficulty: {fileID: 11400000, guid: d8beb18c786ac364c8bf40bb9c372185, type: 2}
-  palette: {fileID: 11400000, guid: 830c1ce0e117bd946981d79f3751765b, type: 2}
-  gameHudView: {fileID: 1970617370}
   boardView: {fileID: 949858078}
+  gameHudView: {fileID: 1970617370}
+  gameOverView: {fileID: 131697029}
+  palette: {fileID: 11400000, guid: 830c1ce0e117bd946981d79f3751765b, type: 2}
+  fallbackDifficulty: {fileID: 11400000, guid: d8beb18c786ac364c8bf40bb9c372185, type: 2}
 --- !u!1 &606617461
 GameObject:
   m_ObjectHideFlags: 0

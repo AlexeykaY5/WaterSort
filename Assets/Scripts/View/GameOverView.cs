@@ -34,6 +34,7 @@ public class GameOverView : MonoBehaviour
     {
         gameObject.SetActive(true);
         text.text = "You Win!";
+        text.color = Color.green;
         restartButton.gameObject.SetActive(false);
     }
 }
