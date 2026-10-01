@@ -4,14 +4,12 @@ public static class LevelGenerator
 {
     public static Tube[] Generate(LevelConfig config, System.Random random)
     {
-
         int totalTubes = config.FilledTubeCount + config.EmptyTubeCount;
         int tubeCapacity = config.TubeCapacity;
 
 
         Tube[] tubes = new Tube[totalTubes];
         List<int> colorIds = new List<int>();
-
 
 
         for(int i = 0; i < config.ColorsCount; i++)

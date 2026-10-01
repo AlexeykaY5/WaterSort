@@ -16,6 +16,6 @@ MonoBehaviour:
   numberOfColors: 4
   tubeCapacity: 3
   numberOfEmptyTubes: 2
-  timer: 300
+  timer: 90
   bonusTime: 30
   difficultyName: Easy Level

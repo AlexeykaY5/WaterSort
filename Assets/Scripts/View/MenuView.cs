@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
@@ -17,13 +16,13 @@ public class MenuView : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     [SerializeField] private Canvas canvas;
 
     private float step = 1000f;
+    private float smoothSpeed = 10f;
     private float offset;
     private float target = 0f;
-    private float smoothSpeed = 10f;
-    private readonly List<DifficultyCardView> cards = new List<DifficultyCardView>();
-
     private bool isDragging;
     private float dragStartOffset;
+
+    private readonly List<DifficultyCardView> cards = new List<DifficultyCardView>();
 
     private void Awake()
     {

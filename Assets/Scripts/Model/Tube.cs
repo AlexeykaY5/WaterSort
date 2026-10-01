@@ -3,8 +3,14 @@ using System.Collections.Generic;
 
 public class Tube
 {
-    private readonly int capacity = 4;
+    private readonly int capacity;
     private List<int> contents = new List<int>();
+
+    public bool IsEmpty => contents.Count == 0;
+
+    private bool IsFull => contents.Count >= capacity;
+
+    private int FreeSpace => capacity - contents.Count;
 
     public Tube(int capacity)
     {
@@ -17,12 +23,6 @@ public class Tube
         contents.AddRange(initialContents);
     }
 
-    private bool IsFull => contents.Count >= capacity;
-
-    public bool IsEmpty => contents.Count == 0;
-
-    private int FreeSpace => capacity - contents.Count;
-
     public int? TopColor()
     {
         if (IsEmpty)
@@ -34,45 +34,6 @@ public class Tube
             return contents[contents.Count - 1];
         }
     }
-
-    public int TopGroupSize()
-    {
-        if (IsEmpty)
-        {
-            return 0;
-        }
-        int count = 1;
-        int top = contents[contents.Count - 1];
-
-        for(int i = contents.Count - 2; i >= 0; i--)
-        {
-            if (contents[i] == top)
-            {
-                count++;
-            }
-            else
-            {
-                break;
-            }
-        }
-        return count;
-    }
-
-    public bool CanPourInto(Tube other)
-    {
-        if (IsEmpty)
-        {
-            return false;
-        }else if (other.IsFull)
-        {
-            return false;
-        }else if(this == other)
-        {
-            return false;
-        }
-        return true;
-    }
-
 
     public int PourInto(Tube other)
     {
@@ -112,5 +73,45 @@ public class Tube
     public List<int> GetContents()
     {
         return new List<int>(contents);
+    }
+
+    private bool CanPourInto(Tube other)
+    {
+        if (IsEmpty)
+        {
+            return false;
+        }
+        else if (other.IsFull)
+        {
+            return false;
+        }
+        else if (this == other)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private int TopGroupSize()
+    {
+        if (IsEmpty)
+        {
+            return 0;
+        }
+        int count = 1;
+        int top = contents[contents.Count - 1];
+
+        for (int i = contents.Count - 2; i >= 0; i--)
+        {
+            if (contents[i] == top)
+            {
+                count++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return count;
     }
 }

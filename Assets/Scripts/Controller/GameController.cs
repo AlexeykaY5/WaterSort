@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GameOverView gameOverView;
-    [SerializeField] private DifficultySettings fallbackDifficulty;
-    [SerializeField] private ColorPalette palette;
-    [SerializeField] private GameHudView gameHudView;
     [SerializeField] private BoardView boardView;
+    [SerializeField] private GameHudView gameHudView;
+    [SerializeField] private GameOverView gameOverView;
+    [SerializeField] private ColorPalette palette;
+    [SerializeField] private DifficultySettings fallbackDifficulty;
 
     private DifficultySettings settings;
     private readonly System.Random random = new System.Random();
@@ -72,7 +72,7 @@ public class GameController : MonoBehaviour
     {
         MoveResult result = model.Click(tubeIndex);
 
-        if(result == MoveResult.None)
+        if (result == MoveResult.None)
         {
             return;
         }
@@ -87,7 +87,7 @@ public class GameController : MonoBehaviour
 
     private void RenderBoard()
     {
-        for(int i = 0; i < model.TubeCount; i++)
+        for (int i = 0; i < model.TubeCount; i++)
         {
             boardView.RenderTube(i, ToColors(model.GetTubeColors(i)));
         }

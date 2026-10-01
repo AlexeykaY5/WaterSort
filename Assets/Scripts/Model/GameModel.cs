@@ -7,31 +7,18 @@ public class GameModel
     private readonly HashSet<int> completedColors = new HashSet<int>();
     private int selectedIndex = -1;
 
+    public int TubeCount => tubes.Length;
+    public int SelectedIndex => selectedIndex;
+    public float TimeLeft { get; private set; }
+    public bool IsTimeUp { get; private set; }
+    public bool IsWon { get; private set; }
+    public bool IsOver => IsWon || IsTimeUp;
+
     public GameModel(Tube[] tubes, LevelConfig config)
     {
         this.tubes = tubes;
         this.config = config;
         TimeLeft = config.StartTime;
-    }
-
-    public int TubeCount => tubes.Length;
-    public int SelectedIndex => selectedIndex;
-    public float TimeLeft { get; private set; }
-    public bool IsWon { get; private set; }
-    public bool IsTimeUp { get; private set; }
-    public bool IsOver => IsWon || IsTimeUp;
-
-
-    public bool IsNewRecord(float? previousBest)
-    {
-        if(previousBest == null)
-        {
-            return true;
-        }
-        else
-        {
-            return TimeLeft > previousBest.Value;
-        }
     }
 
     public IReadOnlyList<int> GetTubeColors(int index)
@@ -87,6 +74,18 @@ public class GameModel
         }
     }
 
+    public bool IsNewRecord(float? previousBest)
+    {
+        if (previousBest == null)
+        {
+            return true;
+        }
+        else
+        {
+            return TimeLeft > previousBest.Value;
+        }
+    }
+    
     private void TryGiveBonus(int index)
     {
         if (!tubes[index].IsSingleColor())

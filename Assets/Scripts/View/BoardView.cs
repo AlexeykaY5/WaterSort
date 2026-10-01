@@ -14,7 +14,6 @@ public class BoardView : MonoBehaviour
     private int maxColumns;
     private readonly List<TubeView> tubeViews = new List<TubeView>();
 
-
     private void Awake()
     {
         baseCellSize = grid.cellSize;
@@ -48,6 +47,13 @@ public class BoardView : MonoBehaviour
         tubeViews[tubeId].Render(colors);
     }
 
+    public void SetSelected(int selectedId)
+    {
+        for(int i = 0; i < tubeViews.Count; i++)
+        {
+            tubeViews[i].SetSelected(i == selectedId);
+        }
+    }
 
     private void FitCells(int tubeCount)
     {
@@ -69,16 +75,6 @@ public class BoardView : MonoBehaviour
         float scale = Mathf.Min(cellWidth / baseCellSize.x, cellHeight / baseCellSize.y, 1f);
         grid.cellSize = baseCellSize * scale;
     }
-
-
-    public void SetSelected(int selectedId)
-    {
-        for(int i = 0; i < tubeViews.Count; i++)
-        {
-            tubeViews[i].SetSelected(i == selectedId);
-        }
-    }
-
 
     private void OnTubeClicked(int index)
     {

@@ -5,17 +5,16 @@ using System.Collections.Generic;
 
 public class TubeView : MonoBehaviour
 {
+    public event Action<int> Clicked;
+
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Button button;
     [SerializeField] private Image slotPrefab;
     [SerializeField] private RectTransform slotsContainer;
 
-
     private int tubeIndex;
 
     private List<Image> slots = new List<Image>();
-
-    public event Action<int> Clicked;
 
     private void Awake()
     {
@@ -60,11 +59,6 @@ public class TubeView : MonoBehaviour
         }
     }
 
-    private void OnClick()
-    {
-        Clicked?.Invoke(tubeIndex);
-    }
-
     public void SetSelected(bool selected)
     {
         if (selected)
@@ -80,5 +74,10 @@ public class TubeView : MonoBehaviour
     public void Init(int tubeIndex)
     {
         this.tubeIndex = tubeIndex;
+    }
+
+    private void OnClick()
+    {
+        Clicked?.Invoke(tubeIndex);
     }
 }
