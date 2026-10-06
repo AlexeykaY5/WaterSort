@@ -9,53 +9,75 @@ public class TubeView : MonoBehaviour
 
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Button button;
-    [SerializeField] private Image slotPrefab;
-    [SerializeField] private RectTransform slotsContainer;
+    [SerializeField] private Image liquidImage;
+    [SerializeField] private float fillSpeed = 1.5f;
 
     private int tubeIndex;
-
-    private List<Image> slots = new List<Image>();
+    private Material material;
+    private Texture2D layers;
+    private float shownFill;
+    private float targetFill;
+    private List<Color> pendingColors;
 
     private void Awake()
     {
         button.onClick.AddListener(OnClick);
+        material = new Material(liquidImage.material);
+        liquidImage.material = material;
+    }
+
+    private void Update()
+    {
+        material.SetFloat("_Angle", rectTransform.eulerAngles.z);
+
+        if(shownFill == targetFill)
+        {
+            return;
+        }
+
+        shownFill = Mathf.MoveTowards(shownFill, targetFill, fillSpeed * Time.deltaTime);
+        material.SetFloat("_FillAmount", shownFill);
+
+        if(shownFill == targetFill && pendingColors != null)
+        {
+            WrittenColors(pendingColors);
+            pendingColors = null;
+        }
     }
 
     private void OnDestroy()
     {
         button.onClick.RemoveListener(OnClick);
+        Destroy(material);
+        Destroy(layers);
     }
 
     public void Build(int capacity)
     {
-        foreach(Image slot in slots)
+        if(layers != null)
         {
-            Destroy(slot.gameObject);
+            Destroy(layers);
         }
 
-        slots.Clear();
+        layers = new Texture2D(1, capacity, TextureFormat.RGBA32, false);
+        layers.filterMode = FilterMode.Point;
+        layers.wrapMode = TextureWrapMode.Clamp;
 
-        for(int i = 0; i < capacity; i++)
-        {
-            Image slot = Instantiate(slotPrefab, slotsContainer);
-            slots.Add(slot);
-        }
+        material.SetTexture("_Layers", layers);
+        material.SetFloat("_FillAmount", shownFill);
     }
 
     public void Render(IReadOnlyList<Color> tubeColors)
     {
-
-        for(int i = 0; i < slots.Count; i++)
+        targetFill = (float)tubeColors.Count / layers.height;
+        if (targetFill >= shownFill)
         {
-            int level = slots.Count - 1 - i;
-            if(tubeColors.Count > level)
-            {
-                slots[i].color = tubeColors[level];
-            }
-            else
-            {
-                slots[i].color = Color.clear;
-            }
+            WrittenColors(tubeColors);
+            pendingColors = null;
+        }
+        else
+        {
+            pendingColors = new List<Color>(tubeColors);
         }
     }
 
@@ -71,6 +93,18 @@ public class TubeView : MonoBehaviour
         }
     }
 
+    //public void SetPoured(bool selected)
+    //{
+    //    if (selected)
+    //    {
+    //        rectTransform.anchoredPosition = new Vector2(0, 30f);
+    //    }
+    //    else
+    //    {
+    //        rectTransform.anchoredPosition = Vector2.zero;
+    //    }
+    //}
+
     public void Init(int tubeIndex)
     {
         this.tubeIndex = tubeIndex;
@@ -79,5 +113,21 @@ public class TubeView : MonoBehaviour
     private void OnClick()
     {
         Clicked?.Invoke(tubeIndex);
+    }
+
+    private void WrittenColors(IReadOnlyList<Color> colors)
+    {
+        for (int i = 0; i < layers.height; i++)
+        {
+            if (i < colors.Count)
+            {
+                layers.SetPixel(0, i, colors[i]);
+            }
+            else
+            {
+                layers.SetPixel(0, i, Color.clear);
+            }
+        }
+        layers.Apply();
     }
 }

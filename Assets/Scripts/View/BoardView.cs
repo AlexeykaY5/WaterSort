@@ -39,7 +39,6 @@ public class BoardView : MonoBehaviour
             view.Clicked += OnTubeClicked;
             tubeViews.Add(view);
         }
-
     }
 
     public void RenderTube(int tubeId, IReadOnlyList<Color> colors)
