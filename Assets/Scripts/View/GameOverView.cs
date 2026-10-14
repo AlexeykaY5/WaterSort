@@ -11,6 +11,10 @@ public class GameOverView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button menuButton;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private BoardView boardView;
+
+    private bool waitingToShow;
 
     private void Awake()
     {
@@ -18,23 +22,49 @@ public class GameOverView : MonoBehaviour
         menuButton.onClick.AddListener(() => MenuClicked?.Invoke());
     }
 
+    private void Update()
+    {
+        if(waitingToShow && !boardView.IsAnyPouring())
+        {
+            waitingToShow = false;
+            SetVisible(true);
+        }
+    }
+
     public void Hide()
     {
-        gameObject.SetActive(false);
+        waitingToShow = false;
+        SetVisible(false);
     }
 
     public void ShowLose()
     {
-        gameObject.SetActive(true);
         text.text = "Time is up";
         restartButton.gameObject.SetActive(true);
+        waitingToShow = true;
     }
 
     public void ShowWin()
     {
-        gameObject.SetActive(true);
         text.text = "You Win!";
         text.color = Color.green;
         restartButton.gameObject.SetActive(false);
+        waitingToShow = true;
     }
+    
+    private void SetVisible(bool visible)
+    {
+        if (visible)
+        {
+            canvasGroup.alpha = 1f;
+        }
+        else
+        {
+            canvasGroup.alpha = 0f;
+        }
+
+        canvasGroup.interactable = visible;
+        canvasGroup.blocksRaycasts = visible;
+    }
+
 }

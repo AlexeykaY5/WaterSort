@@ -10,6 +10,9 @@ public class BoardView : MonoBehaviour
     [SerializeField] private TubeView tubeViewPrefab;
     [SerializeField] private GridLayoutGroup grid;
 
+    private readonly List<int> layerCounts = new List<int>();
+    private int pourFrom = -1;
+    private int pourTo = -1;
     private Vector2 baseCellSize;
     private int maxColumns;
     private readonly List<TubeView> tubeViews = new List<TubeView>();
@@ -18,6 +21,17 @@ public class BoardView : MonoBehaviour
     {
         baseCellSize = grid.cellSize;
         maxColumns = grid.constraintCount;
+    }
+
+    private void Update()
+    {
+        if(pourFrom != -1 && pourTo != -1)
+        {
+            tubeViews[pourFrom].Pour.Play(tubeViews[pourTo].Pour);
+        }
+
+        pourFrom = -1;
+        pourTo = -1;
     }
 
     public void Build(int tubeCount, int capacity)
@@ -30,6 +44,7 @@ public class BoardView : MonoBehaviour
         }
 
         tubeViews.Clear();
+        layerCounts.Clear();
 
         for(int i = 0; i < tubeCount; i++)
         {
@@ -38,11 +53,22 @@ public class BoardView : MonoBehaviour
             view.Build(capacity);
             view.Clicked += OnTubeClicked;
             tubeViews.Add(view);
+            layerCounts.Add(0);
         }
     }
 
     public void RenderTube(int tubeId, IReadOnlyList<Color> colors)
     {
+        int oldCount = layerCounts[tubeId];
+        if(colors.Count < oldCount)
+        {
+            pourFrom = tubeId;
+        }else if(colors.Count > oldCount)
+        {
+            pourTo = tubeId;
+        }
+
+        layerCounts[tubeId] = colors.Count;
         tubeViews[tubeId].Render(colors);
     }
 
@@ -52,6 +78,18 @@ public class BoardView : MonoBehaviour
         {
             tubeViews[i].SetSelected(i == selectedId);
         }
+    }
+
+    public bool IsAnyPouring()
+    {
+        foreach (TubeView view in tubeViews)
+        {
+            if (view.Pour.IsPouring)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void FitCells(int tubeCount)
@@ -77,6 +115,10 @@ public class BoardView : MonoBehaviour
 
     private void OnTubeClicked(int index)
     {
+        if (IsAnyPouring())
+        {
+            return;
+        }
         TubeClicked?.Invoke(index);
     }
 }

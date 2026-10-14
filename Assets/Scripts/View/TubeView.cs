@@ -1,16 +1,18 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class TubeView : MonoBehaviour
 {
     public event Action<int> Clicked;
 
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private RectTransform tilt;
     [SerializeField] private Button button;
     [SerializeField] private Image liquidImage;
-    [SerializeField] private float fillSpeed = 1.5f;
+    [SerializeField] private TubePourView pour;
+    [SerializeField] private float fillSpeed = 0.7f;
 
     private int tubeIndex;
     private Material material;
@@ -18,6 +20,12 @@ public class TubeView : MonoBehaviour
     private float shownFill;
     private float targetFill;
     private List<Color> pendingColors;
+    private bool hasRendered;
+    private bool holdFill;
+
+    public TubePourView Pour => pour;
+    public float ShownFill => shownFill;
+    public bool IsFillMoving => shownFill != targetFill;
 
     private void Awake()
     {
@@ -28,9 +36,9 @@ public class TubeView : MonoBehaviour
 
     private void Update()
     {
-        material.SetFloat("_Angle", rectTransform.eulerAngles.z);
+        material.SetFloat("_Angle", tilt.eulerAngles.z);
 
-        if(shownFill == targetFill)
+        if (holdFill || shownFill == targetFill)
         {
             return;
         }
@@ -38,9 +46,9 @@ public class TubeView : MonoBehaviour
         shownFill = Mathf.MoveTowards(shownFill, targetFill, fillSpeed * Time.deltaTime);
         material.SetFloat("_FillAmount", shownFill);
 
-        if(shownFill == targetFill && pendingColors != null)
+        if (shownFill == targetFill && pendingColors != null)
         {
-            WrittenColors(pendingColors);
+            WriteColors(pendingColors);
             pendingColors = null;
         }
     }
@@ -52,9 +60,14 @@ public class TubeView : MonoBehaviour
         Destroy(layers);
     }
 
+    public void Init(int tubeIndex)
+    {
+        this.tubeIndex = tubeIndex;
+    }
+
     public void Build(int capacity)
     {
-        if(layers != null)
+        if (layers != null)
         {
             Destroy(layers);
         }
@@ -69,10 +82,18 @@ public class TubeView : MonoBehaviour
 
     public void Render(IReadOnlyList<Color> tubeColors)
     {
-        targetFill = (float)tubeColors.Count / layers.height;
+        float newFill = (float)tubeColors.Count / layers.height;
+        if (hasRendered && newFill != targetFill)
+        {
+            holdFill = true;
+        }
+
+        hasRendered = true;
+        targetFill = newFill;
+
         if (targetFill >= shownFill)
         {
-            WrittenColors(tubeColors);
+            WriteColors(tubeColors);
             pendingColors = null;
         }
         else
@@ -93,21 +114,9 @@ public class TubeView : MonoBehaviour
         }
     }
 
-    //public void SetPoured(bool selected)
-    //{
-    //    if (selected)
-    //    {
-    //        rectTransform.anchoredPosition = new Vector2(0, 30f);
-    //    }
-    //    else
-    //    {
-    //        rectTransform.anchoredPosition = Vector2.zero;
-    //    }
-    //}
-
-    public void Init(int tubeIndex)
+    public void ReleaseFill()
     {
-        this.tubeIndex = tubeIndex;
+        holdFill = false;
     }
 
     private void OnClick()
@@ -115,7 +124,7 @@ public class TubeView : MonoBehaviour
         Clicked?.Invoke(tubeIndex);
     }
 
-    private void WrittenColors(IReadOnlyList<Color> colors)
+    private void WriteColors(IReadOnlyList<Color> colors)
     {
         for (int i = 0; i < layers.height; i++)
         {
