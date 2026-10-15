@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ColorPalette", menuName = "WaterSort/ColorPalette")]
 public class ColorPalette : ScriptableObject
 {
-    [System.Serializable]
+    [Serializable]
     private struct Entry
     {
         public string name;
@@ -12,22 +14,69 @@ public class ColorPalette : ScriptableObject
 
     [SerializeField] private Entry[] entries;
 
-    public int Count => entries.Length;
+    private Dictionary<string, Color> colorsByName;
 
     private void OnValidate()
     {
-        for(int i = 0; i < entries.Length; i++)
+        for (int i = 0; i < entries.Length; i++)
         {
             entries[i].color.a = 1f;
         }
+
+        colorsByName = null;
     }
 
-    public Color GetColor(int colorId)
+    public List<string> GetNames(int count)
     {
-        if (colorId < 0 || colorId >= entries.Length)
+        BuildIfNeeded();
+
+        if (count > entries.Length)
         {
-            return Color.magenta;
+            throw new ArgumentOutOfRangeException(nameof(count), $"ColorPalette has only {entries.Length} colors, but {count} are needed");
         }
-        return entries[colorId].color;
-    }   
+
+        List<string> names = new List<string>();
+        for (int i = 0; i < count; i++)
+        {
+            names.Add(entries[i].name);
+        }
+        return names;
+    }
+
+    public Color GetColor(string colorName)
+    {
+        BuildIfNeeded();
+
+        if (!colorsByName.TryGetValue(colorName, out Color color))
+        {
+            throw new KeyNotFoundException($"ColorPalette has no color named '{colorName}'");
+        }
+        return color;
+    }
+
+    private void BuildIfNeeded()
+    {
+        if (colorsByName != null)
+        {
+            return;
+        }
+
+        Dictionary<string, Color> result = new Dictionary<string, Color>();
+        foreach (Entry entry in entries)
+        {
+            if (string.IsNullOrEmpty(entry.name))
+            {
+                throw new InvalidOperationException("ColorPalette has a color without a name");
+            }
+
+            if (result.ContainsKey(entry.name))
+            {
+                throw new InvalidOperationException($"ColorPalette has the color name '{entry.name}' twice");
+            }
+
+            result.Add(entry.name, entry.color);
+        }
+
+        colorsByName = result;
+    }
 }

@@ -1,18 +1,33 @@
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private BoardView boardView;
     [SerializeField] private GameHudView gameHudView;
     [SerializeField] private GameOverView gameOverView;
-    [SerializeField] private ColorPalette palette;
-    [SerializeField] private DifficultySettings fallbackDifficulty;
+
+    private GameModel model;
+    private RecordStorage recordStorage;
+    private ConfigDatabase configs;
+    private LevelSelection levelSelection;
+    private SceneLoader sceneLoader;
+    private ColorPalette palette;
 
     private DifficultySettings settings;
     private readonly System.Random random = new System.Random();
-    private readonly RecordStorage recordStorage = new RecordStorage();
-    private GameModel model;
+
+    [Inject]
+    public void Construct(GameModel model, RecordStorage recordStorage, ConfigDatabase configs,
+                          ColorPalette palette, LevelSelection levelSelection, SceneLoader sceneLoader)
+    {
+        this.model = model;
+        this.recordStorage = recordStorage;
+        this.configs = configs;
+        this.levelSelection = levelSelection;
+        this.sceneLoader = sceneLoader;
+        this.palette = palette;
+    }
 
     private void Awake()
     {
@@ -26,111 +41,125 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        DifficultySettings difficulty = SceneFlow.SelectedDifficulty;
-        if (difficulty == null)
-        {
-            difficulty = fallbackDifficulty;
-        }
-
-        StartGame(difficulty);
+        settings = configs.GetDifficulty(levelSelection.SelectedId);
+        StartGame();
     }
 
     private void Update()
     {
-        if (model == null || model.IsOver)
+        if (model.IsOver)
         {
             return;
         }
 
-        model.Tick(Time.deltaTime);
-        gameHudView.SetTime(model.TimeLeft);
-
-        if (model.IsTimeUp)
+        model.TimeLeft -= Time.deltaTime;
+        if (model.TimeLeft <= 0f)
         {
-            Lose();
+            model.TimeLeft = 0f;
+            model.IsTimeUp = true;
         }
     }
 
-    private void StartGame(DifficultySettings settings)
+    private void StartGame()
     {
-        gameOverView.Hide();
-
-        this.settings = settings;
-        gameHudView.SetDifficulty(settings.difficultyName);
-
-        LevelConfig config = settings.ToConfig();
-        Tube[] tubes = LevelGenerator.Generate(config, random);
-        model = new GameModel(tubes, config);
-
-        boardView.Build(model.TubeCount, config.TubeCapacity);
-
-        gameHudView.SetTime(model.TimeLeft);
-        RenderBoard();
+        LevelGenerator.Generate(model.Tubes, settings, palette, random);
+        model.SelectedIndex = -1;
+        model.TimeLeft = settings.StartTime;
+        model.IsWon = false;
+        model.IsTimeUp = false;
+        model.CompletedColors.Clear();
+        model.Round++;
     }
 
-    private void OnTubeClicked(int tubeIndex)
+    private void OnTubeClicked(int index)
     {
-        MoveResult result = model.Click(tubeIndex);
-
-        if (result == MoveResult.None)
+        if (model.IsOver)
         {
             return;
         }
 
-        RenderBoard();
+        if (model.SelectedIndex == -1)
+        {
+            if (model.Tubes[index].IsEmpty)
+            {
+                return;
+            }
+            model.SelectedIndex = index;
+        }
+        else if (model.SelectedIndex == index)
+        {
+            model.SelectedIndex = -1;
+        }
+        else
+        {
+            Pour(model.SelectedIndex, index);
+            model.SelectedIndex = -1;
+        }
 
         if (model.IsWon)
         {
-            Win();
+            SaveRecord();
         }
     }
 
-    private void RenderBoard()
+    private void Pour(int fromIndex, int toIndex)
     {
-        for (int i = 0; i < model.TubeCount; i++)
+        int poured = model.Tubes[fromIndex].PourInto(model.Tubes[toIndex]);
+        if (poured == 0)
         {
-            boardView.RenderTube(i, ToColors(model.GetTubeColors(i)));
+            return;
         }
 
-        boardView.SetSelected(model.SelectedIndex);
-    }
-
-    private void Win()
-    {
-        float? previousBest = recordStorage.Load(settings.id);
-
-        if (model.IsNewRecord(previousBest))
+        model.IsWon = CheckWin();
+        if (!model.IsWon)
         {
-            recordStorage.Save(settings.id, model.TimeLeft);
+            TryGiveBonus(toIndex);
         }
-
-        gameOverView.ShowWin();
     }
 
-    private void Lose()
+    private void TryGiveBonus(int index)
     {
-        gameOverView.ShowLose();
+        Tube tube = model.Tubes[index];
+        if (!tube.IsSingleColor())
+        {
+            return;
+        }
+
+        string color = tube.TopColor();
+        if (model.CompletedColors.Add(color))
+        {
+            model.TimeLeft += settings.BonusTime;
+        }
+    }
+
+    private bool CheckWin()
+    {
+        foreach (Tube tube in model.Tubes)
+        {
+            if (!tube.IsSingleColor() && !tube.IsEmpty)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void SaveRecord()
+    {
+        float? previousBest = recordStorage.Load(settings.Id);
+        if (previousBest == null || model.TimeLeft > previousBest.Value)
+        {
+            recordStorage.Save(settings.Id, model.TimeLeft);
+        }
     }
 
     private void GoToMenu()
     {
-        SceneFlow.LoadMenu();
+        sceneLoader.LoadMenu();
     }
 
     private void Restart()
     {
-        StartGame(settings);
-    }
-
-    private Color[] ToColors(IReadOnlyList<int> colorIds)
-    {
-        Color[] result = new Color[colorIds.Count];
-
-        for (int i = 0; i < colorIds.Count; i++)
-        {
-            result[i] = palette.GetColor(colorIds[i]);
-        }
-
-        return result;
+        StartGame();
     }
 }

@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class DifficultyCardView : MonoBehaviour
 {
-
-    [SerializeField] private RectTransform rectTransform;
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI recordText;
 
@@ -20,10 +18,5 @@ public class DifficultyCardView : MonoBehaviour
         {
             recordText.text = " - ";
         }
-    }
-
-    public void SetPositionX(float x)
-    {
-        rectTransform.anchoredPosition = new Vector2(x, 0f);
     }
 }

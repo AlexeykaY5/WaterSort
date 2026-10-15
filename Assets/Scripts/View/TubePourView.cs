@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class TubePourView : MonoBehaviour
 {
-    [SerializeField] private TubeView tubeView;     // вода этой пробирки
-    [SerializeField] private Animator animator;     // наклоняет Tilt по ползункам Side и Pour
-    [SerializeField] private RectTransform tube;    // что летает (Tube)
-    [SerializeField] private Canvas tubeCanvas;     // Canvas на Tube, чтобы рисоваться поверх
+    [SerializeField] private TubeView tubeView;
+    [SerializeField] private Animator animator;
+    [SerializeField] private RectTransform tube;
+    [SerializeField] private Canvas tubeCanvas;
     [SerializeField] private Vector2 pourOffset = new Vector2(0.7f, 0.9f);
     [SerializeField] private float moveTime = 1f;
 
@@ -17,14 +17,14 @@ public class TubePourView : MonoBehaviour
         float side;
         if (tube.position.x < target.tube.position.x)
         {
-            side = -1f;     // я левее цели: встаю слева
+            side = -1f;
         }
         else
         {
-            side = 1f;      // я правее цели: встаю справа
+            side = 1f;
         }
 
-        animator.SetFloat("Side", -side);   // стою слева → наклон вправо (+1), справа → влево (−1)
+        animator.SetFloat("Side", -side);
 
         Vector2 size = target.tube.rect.size;
         Vector3 localPoint = new Vector3(side * size.x * pourOffset.x, size.y * pourOffset.y, 0f);
@@ -40,11 +40,9 @@ public class TubePourView : MonoBehaviour
         tubeCanvas.overrideSorting = true;
         tubeCanvas.sortingOrder = 1;
 
-        // 1. Подлёт: наклон растёт до угла, при котором вода у горлышка
         float startPour = 1f - tubeView.ShownFill;
         yield return Fly(homePosition, pourPosition, 0f, startPour);
 
-        // 2. Переливание: ползунок идёт вслед за водой
         tubeView.ReleaseFill();
         target.tubeView.ReleaseFill();
         while (tubeView.IsFillMoving || target.tubeView.IsFillMoving)
@@ -53,7 +51,6 @@ public class TubePourView : MonoBehaviour
             yield return null;
         }
 
-        // 3. Возврат: выпрямиться по дороге домой
         float endPour = 1f - tubeView.ShownFill;
         yield return Fly(pourPosition, homePosition, endPour, 0f);
 
@@ -68,10 +65,10 @@ public class TubePourView : MonoBehaviour
         while (time < moveTime)
         {
             time += Time.deltaTime;
-            float t = time / moveTime;                                    // доля пути: от 0 до 1
+            float t = time / moveTime;
 
             tube.position = Vector3.Lerp(fromPosition, toPosition, t);
-            animator.SetFloat("Pour", Mathf.Lerp(fromPour, toPour, t));   // наклон вместе с полётом
+            animator.SetFloat("Pour", Mathf.Lerp(fromPour, toPour, t));
 
             yield return null;
         }

@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 public class GameOverView : MonoBehaviour
 {
@@ -14,46 +15,60 @@ public class GameOverView : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private BoardView boardView;
 
-    private bool waitingToShow;
+    private IGameState state;
+    private bool isShown;
+
+    [Inject]
+    public void Construct(IGameState state)
+    {
+        this.state = state;
+    }
 
     private void Awake()
     {
         restartButton.onClick.AddListener(() => RestartClicked?.Invoke());
         menuButton.onClick.AddListener(() => MenuClicked?.Invoke());
+        SetVisible(false);
     }
 
     private void Update()
     {
-        if(waitingToShow && !boardView.IsAnyPouring())
+        if (!state.IsOver)
         {
-            waitingToShow = false;
+            if (isShown)
+            {
+                SetVisible(false);
+            }
+            return;
+        }
+
+        if (!isShown && !boardView.IsBusy())
+        {
+            ShowResult();
             SetVisible(true);
         }
     }
 
-    public void Hide()
+    private void ShowResult()
     {
-        waitingToShow = false;
-        SetVisible(false);
+        if (state.IsWon)
+        {
+            text.text = "You Win!";
+            text.color = Color.green;
+            restartButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            text.text = "Time is up";
+            text.color = Color.red;
+            restartButton.gameObject.SetActive(true);
+        }
     }
 
-    public void ShowLose()
-    {
-        text.text = "Time is up";
-        restartButton.gameObject.SetActive(true);
-        waitingToShow = true;
-    }
-
-    public void ShowWin()
-    {
-        text.text = "You Win!";
-        text.color = Color.green;
-        restartButton.gameObject.SetActive(false);
-        waitingToShow = true;
-    }
-    
     private void SetVisible(bool visible)
     {
+        isShown = visible;
+
         if (visible)
         {
             canvasGroup.alpha = 1f;
@@ -66,5 +81,4 @@ public class GameOverView : MonoBehaviour
         canvasGroup.interactable = visible;
         canvasGroup.blocksRaycasts = visible;
     }
-
 }

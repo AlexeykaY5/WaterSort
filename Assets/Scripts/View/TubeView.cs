@@ -60,6 +60,16 @@ public class TubeView : MonoBehaviour
         Destroy(layers);
     }
 
+    public void ResetFill()
+    {
+        shownFill = 0f;
+        targetFill = 0f;
+        hasRendered = false;
+        holdFill = false;
+        pendingColors = null;
+        material.SetFloat("_FillAmount", 0f);
+    }
+
     public void Init(int tubeIndex)
     {
         this.tubeIndex = tubeIndex;
