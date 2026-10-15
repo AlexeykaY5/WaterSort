@@ -59,10 +59,16 @@ public class BoardView : MonoBehaviour
 
         if (state.SelectedIndex != drawnSelected)
         {
-            drawnSelected = state.SelectedIndex;
-            for (int i = 0; i < tubeViews.Count; i++)
+            if (drawnSelected != -1)
             {
-                tubeViews[i].SetSelected(i == drawnSelected);
+                tubeViews[drawnSelected].SetSelected(false);
+            }
+
+            drawnSelected = state.SelectedIndex;
+
+            if (drawnSelected != -1)
+            {
+                tubeViews[drawnSelected].SetSelected(true);
             }
         }
 
@@ -90,7 +96,7 @@ public class BoardView : MonoBehaviour
 
             drawn.Clear();
             drawn.AddRange(contents);
-            tubeViews[i].Render(ToColors(contents));
+            tubeViews[i].Render(ToColors(contents), !isNewRound);
         }
 
         if (!isNewRound && pourFrom != -1 && pourTo != -1)
@@ -101,23 +107,26 @@ public class BoardView : MonoBehaviour
 
     public bool IsBusy()
     {
-        foreach (TubeView view in tubeViews)
-        {
-            if (view.Pour.IsPouring)
-            {
-                return true;
-            }
-        }
-
         for (int i = 0; i < tubeViews.Count; i++)
         {
-            if (!IsSame(state.TubeStates[i].Contents, drawnContents[i]))
+            if (IsTubeBusy(i))
             {
                 return true;
             }
         }
-
         return false;
+    }
+
+    private bool IsTubeBusy(int index)
+    {
+        TubeView view = tubeViews[index];
+
+        if (view.Pour.IsPouring || view.IsFillMoving)
+        {
+            return true;
+        }
+
+        return !IsSame(state.TubeStates[index].Contents, drawnContents[index]);
     }
 
     private void Build()
@@ -188,7 +197,7 @@ public class BoardView : MonoBehaviour
 
     private void OnTubeClicked(int index)
     {
-        if (IsBusy())
+        if (IsTubeBusy(index))
         {
             return;
         }

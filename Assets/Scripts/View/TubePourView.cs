@@ -9,6 +9,7 @@ public class TubePourView : MonoBehaviour
     [SerializeField] private Canvas tubeCanvas;
     [SerializeField] private Vector2 pourOffset = new Vector2(0.7f, 0.9f);
     [SerializeField] private float moveTime = 1f;
+    [SerializeField] private float tiltSpeed = 2f;
 
     public bool IsPouring { get; private set; }
 
@@ -40,8 +41,8 @@ public class TubePourView : MonoBehaviour
         tubeCanvas.overrideSorting = true;
         tubeCanvas.sortingOrder = 1;
 
-        float startPour = 1f - tubeView.ShownFill;
-        yield return Fly(homePosition, pourPosition, 0f, startPour);
+        yield return Fly(homePosition, pourPosition);
+        yield return Tilt(1f - tubeView.ShownFill);
 
         tubeView.ReleaseFill();
         target.tubeView.ReleaseFill();
@@ -51,29 +52,36 @@ public class TubePourView : MonoBehaviour
             yield return null;
         }
 
-        float endPour = 1f - tubeView.ShownFill;
-        yield return Fly(pourPosition, homePosition, endPour, 0f);
+        yield return Tilt(0f);
+        yield return Fly(pourPosition, homePosition);
 
         tubeCanvas.overrideSorting = false;
         IsPouring = false;
     }
 
-    private IEnumerator Fly(Vector3 fromPosition, Vector3 toPosition, float fromPour, float toPour)
+    private IEnumerator Fly(Vector3 fromPosition, Vector3 toPosition)
     {
         float time = 0f;
 
         while (time < moveTime)
         {
             time += Time.deltaTime;
-            float t = time / moveTime;
-
-            tube.position = Vector3.Lerp(fromPosition, toPosition, t);
-            animator.SetFloat("Pour", Mathf.Lerp(fromPour, toPour, t));
-
+            tube.position = Vector3.Lerp(fromPosition, toPosition, time / moveTime);
             yield return null;
         }
 
         tube.position = toPosition;
-        animator.SetFloat("Pour", toPour);
+    }
+
+    private IEnumerator Tilt(float toPour)
+    {
+        float pour = animator.GetFloat("Pour");
+
+        while (pour != toPour)
+        {
+            pour = Mathf.MoveTowards(pour, toPour, tiltSpeed * Time.deltaTime);
+            animator.SetFloat("Pour", pour);
+            yield return null;
+        }
     }
 }

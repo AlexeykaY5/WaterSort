@@ -20,7 +20,6 @@ public class TubeView : MonoBehaviour
     private float shownFill;
     private float targetFill;
     private List<Color> pendingColors;
-    private bool hasRendered;
     private bool holdFill;
 
     public TubePourView Pour => pour;
@@ -64,7 +63,6 @@ public class TubeView : MonoBehaviour
     {
         shownFill = 0f;
         targetFill = 0f;
-        hasRendered = false;
         holdFill = false;
         pendingColors = null;
         material.SetFloat("_FillAmount", 0f);
@@ -90,16 +88,10 @@ public class TubeView : MonoBehaviour
         material.SetFloat("_FillAmount", shownFill);
     }
 
-    public void Render(IReadOnlyList<Color> tubeColors)
+    public void Render(IReadOnlyList<Color> tubeColors, bool waitForPour)
     {
-        float newFill = (float)tubeColors.Count / layers.height;
-        if (hasRendered && newFill != targetFill)
-        {
-            holdFill = true;
-        }
-
-        hasRendered = true;
-        targetFill = newFill;
+        targetFill = (float)tubeColors.Count / layers.height;
+        holdFill = waitForPour;
 
         if (targetFill >= shownFill)
         {
@@ -111,6 +103,7 @@ public class TubeView : MonoBehaviour
             pendingColors = new List<Color>(tubeColors);
         }
     }
+
 
     public void SetSelected(bool selected)
     {
