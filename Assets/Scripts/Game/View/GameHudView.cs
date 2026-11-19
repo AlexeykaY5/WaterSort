@@ -9,26 +9,32 @@ public class GameHudView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private Button menuButton;
 
+    private string prevTimeLeft = string.Empty;
+
     private void Awake()
     {
         menuButton.onClick.AddListener(() => controller.GoToMenu());
         controller.LevelStarted += OnLevelStarted;
-        controller.TimeChanged += OnTimeChanged;
     }
     
+    private void Update()
+    {
+        var gameModel = controller.Model;
+        string timeLeft = TimeFormat.ToMinutesSeconds(gameModel.TimeLeft);
+        if (prevTimeLeft != timeLeft)
+        {
+            prevTimeLeft = timeLeft;
+            timerText.text = timeLeft;
+        }
+    }
+
     private void OnDestroy()
     {
         controller.LevelStarted -= OnLevelStarted;
-        controller.TimeChanged -= OnTimeChanged;
     }
 
     private void OnLevelStarted()
     {
         difficultyText.text = controller.LevelName;
-    }
-
-    private void OnTimeChanged(int seconds)
-    {
-        timerText.text = TimeFormat.ToMinutesSeconds(seconds);
     }
 }

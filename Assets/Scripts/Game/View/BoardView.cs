@@ -9,17 +9,10 @@ public class BoardView : MonoBehaviour
     [SerializeField] private GameController controller;
     [SerializeField] private ColorPalette palette;
 
-    private IReadGameModel state;
-
     private readonly List<TubeView> tubeViews = new List<TubeView>();
-    private Vector2 baseCellSize;
-    private int maxColumns;
 
     private void Awake()
     {
-        state = controller.Model;
-        baseCellSize = grid.cellSize;
-        maxColumns = grid.constraintCount;
         controller.LevelStarted += OnLevelStarted;
         controller.SelectionChanged += OnSelectionChanged;
         controller.Poured += OnPoured;
@@ -43,7 +36,7 @@ public class BoardView : MonoBehaviour
         {
             tubeViews[i].SetSelected(false);
             tubeViews[i].ResetFill();
-            tubeViews[i].Render(ToColors(state.TubeStates[i].Contents), false);
+            tubeViews[i].Render(ToColors(controller.Model.TubeStates[i].Contents), false);
         }
     }
 
@@ -62,15 +55,15 @@ public class BoardView : MonoBehaviour
 
     private void OnPoured(int fromIndex, int toIndex)
     {
-        tubeViews[fromIndex].Render(ToColors(state.TubeStates[fromIndex].Contents), true);
-        tubeViews[toIndex].Render(ToColors(state.TubeStates[toIndex].Contents), true);
+        tubeViews[fromIndex].Render(ToColors(controller.Model.TubeStates[fromIndex].Contents), true);
+        tubeViews[toIndex].Render(ToColors(controller.Model.TubeStates[toIndex].Contents), true);
         tubeViews[fromIndex].Pour.Play(tubeViews[toIndex].Pour, () => controller.PourFinished(fromIndex, toIndex));
     }
 
     private void Build()
     {
-        int tubeCount = state.TubeStates.Count;
-        int capacity = state.TubeStates[0].Capacity;
+        int tubeCount = controller.Model.TubeStates.Count;
+        int capacity = controller.Model.TubeStates[0].Capacity;
 
         FitCells(tubeCount);
 
@@ -96,7 +89,7 @@ public class BoardView : MonoBehaviour
 
     private void FitCells(int tubeCount)
     {
-        int columns = Mathf.Min(tubeCount, maxColumns);
+        int columns = Mathf.Min(tubeCount, grid.constraintCount);
         int rows = Mathf.CeilToInt((float)tubeCount / columns);
 
         Rect rect = ((RectTransform)transform).rect;
@@ -111,8 +104,8 @@ public class BoardView : MonoBehaviour
         float cellWidth = (width - grid.spacing.x * (columns - 1)) / columns;
         float cellHeight = (height - grid.spacing.y * (rows - 1)) / rows;
 
-        float scale = Mathf.Min(cellWidth / baseCellSize.x, cellHeight / baseCellSize.y, 1f);
-        grid.cellSize = baseCellSize * scale;
+        float scale = Mathf.Min(cellWidth / grid.cellSize.x, cellHeight / grid.cellSize.y, 1f);
+        grid.cellSize = grid.cellSize * scale;
     }
 
     private void OnTubeClicked(int index)

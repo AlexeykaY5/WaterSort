@@ -8,7 +8,6 @@ public class GameController : MonoBehaviour
     public event Action LevelStarted;
     public event Action<int, int> SelectionChanged;
     public event Action<int, int> Poured;
-    public event Action<int> TimeChanged;
     public event Action GameWon;
     public event Action GameLost;
 
@@ -24,7 +23,6 @@ public class GameController : MonoBehaviour
     private LevelSettings settings;
     private int levelIndex;
     private readonly HashSet<int> busyTubes = new HashSet<int>();
-    private int shownSeconds = -1;
 
     [Inject]
     public void Construct(GameModel model, RecordStorage recordStorage, LevelSettings settings,
@@ -59,15 +57,6 @@ public class GameController : MonoBehaviour
             model.IsTimeUp = true;
             EndGame();
         }
-        
-        int seconds = Mathf.CeilToInt(model.TimeLeft);
-        if(seconds == shownSeconds)
-        {
-            return;
-        }
-
-        shownSeconds = seconds;
-        TimeChanged?.Invoke(shownSeconds);
     }
 
     public void ClickTube(int index)
@@ -130,7 +119,6 @@ public class GameController : MonoBehaviour
         Generate();
         model.SelectedIndex = -1;
         model.TimeLeft = settings.StartTime;
-        shownSeconds = -1;
         model.IsWon = false;
         model.IsTimeUp = false;
         model.CompletedColors.Clear();

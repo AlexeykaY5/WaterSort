@@ -9,6 +9,6 @@ public class GameInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<ColorPalette>().FromInstance(colorPalette).AsSingle();
-        Container.Bind<GameModel>().AsSingle();
+        Container.Bind<GameController>().AsSingle();
     }
 }

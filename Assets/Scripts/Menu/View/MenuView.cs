@@ -13,9 +13,14 @@ public class MenuView : MonoBehaviour
 
     private void Awake()
     {
-        nextButton.onClick.AddListener(() => snapScroll.SnapTo(snapScroll.CurrentIndex + 1));
+        nextButton.onClick.AddListener(NextButton_Clicked);
         previousButton.onClick.AddListener(() => snapScroll.SnapTo(snapScroll.CurrentIndex - 1));
         playButton.onClick.AddListener(() => controller.Play(snapScroll.CurrentIndex));
+    }
+
+    private void NextButton_Clicked()
+    {
+        snapScroll.SnapTo(snapScroll.CurrentIndex + 1);
     }
 
     private void Start()
