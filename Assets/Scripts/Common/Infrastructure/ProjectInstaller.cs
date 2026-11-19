@@ -8,7 +8,6 @@ public class ProjectInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<RecordStorage>().AsSingle();
-        Container.Bind<LevelSelection>().AsSingle();
         Container.Bind<SceneLoader>().AsSingle();
 
         Container.Bind<ConfigDatabase>().FromInstance(configDatabase).AsSingle();

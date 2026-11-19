@@ -12,26 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2db22785acb76664683d548f978cfee8, type: 3}
   m_Name: ColorPalette
   m_EditorClassIdentifier: Assembly-CSharp::ColorPalette
-  entries:
+  colors:
   - name: red
     color: {r: 1, g: 0, b: 0, a: 1}
   - name: green
-    color: {r: 0.08167672, g: 1, b: 0, a: 1}
+    color: {r: 0, g: 1, b: 0.14216971, a: 1}
   - name: blue
-    color: {r: 0, g: 0.18304133, b: 1, a: 1}
+    color: {r: 0, g: 0.010046005, b: 1, a: 1}
+  - name: gray
+    color: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 1}
   - name: yellow
-    color: {r: 1, g: 0.9292665, b: 0, a: 1}
+    color: {r: 0.9974991, g: 1, b: 0, a: 1}
+  - name: orange
+    color: {r: 1, g: 0.6401813, b: 0, a: 1}
   - name: purple
-    color: {r: 0.74685574, g: 0, b: 1, a: 1}
-  - name: black
-    color: {r: 0, g: 0, b: 0, a: 1}
+    color: {r: 0.48508072, g: 0, b: 1, a: 1}
+  - name: pink
+    color: {r: 1, g: 0, b: 0.7082653, a: 1}
   - name: white
     color: {r: 1, g: 1, b: 1, a: 1}
-  - name: orange
-    color: {r: 1, g: 0.4828682, b: 0, a: 1}
-  - name: darkGreen
-    color: {r: 0.09395612, g: 0.3301887, b: 0, a: 1}
-  - name: grey
-    color: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
-  - name: whiteGreen
-    color: {r: 0, g: 1, b: 0.6851115, a: 1}

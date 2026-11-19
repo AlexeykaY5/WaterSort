@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d89bab54d8ebc44a4cde893e28eb32, type: 3}
   m_Name: ConfigDatabase
   m_EditorClassIdentifier: Assembly-CSharp::ConfigDatabase
-  difficulties:
-  - {fileID: 11400000, guid: d8beb18c786ac364c8bf40bb9c372185, type: 2}
-  - {fileID: 11400000, guid: 905ad283340eb704280e22f14ea82edc, type: 2}
-  - {fileID: 11400000, guid: 26bcf55e2b0299442a2a25f542434ac0, type: 2}
-  levels: []
+  levels:
+  - {fileID: 11400000, guid: 3978305f98e8fa34ab3ce5640f60263a, type: 2}
+  - {fileID: 11400000, guid: 4e94d5333b6cd824eba874ecc1135ac7, type: 2}
+  - {fileID: 11400000, guid: fd95b23c668cfd241a6bef522114afb7, type: 2}
+  - {fileID: 11400000, guid: d45153ae4b073164abed264f54440f10, type: 2}
+  - {fileID: 11400000, guid: 8358348eab1f46f4b90c924280edea6c, type: 2}
+  - {fileID: 11400000, guid: df58f6e64ebf4cd4f871827484da9bda, type: 2}
+  - {fileID: 11400000, guid: f1661eed29f67684e9188a69ca766c64, type: 2}
+  - {fileID: 11400000, guid: bbb0617871212db4abbc8b9e5fbd203a, type: 2}
+  - {fileID: 11400000, guid: 8215037c5f35af64598b97d174eb7f0e, type: 2}

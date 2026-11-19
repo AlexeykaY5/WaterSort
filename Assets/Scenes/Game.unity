@@ -509,7 +509,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d4eadb7f4344664b88bbe8965a2d062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Board
-  gameHudView: {fileID: 1970617370}
 --- !u!1 &600540347
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +562,7 @@ MonoBehaviour:
   window: {fileID: 131697025}
   text: {fileID: 1464684968}
   restartButton: {fileID: 846926605}
+  nextLevelButton: {fileID: 5042454424574018572}
   menuButton: {fileID: 1719060042}
 --- !u!1 &674518985
 GameObject:
@@ -1005,9 +1005,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1262,6 +1262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 229ae0878417e7a4aaea2a85d556e444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameHudView
+  controller: {fileID: 535888126}
   difficultyText: {fileID: 872967101}
   timerText: {fileID: 674518987}
   menuButton: {fileID: 321627311}
@@ -1499,6 +1500,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 706ea26d9202d9d47b75e67b4d0d85f5, type: 3}
+--- !u!114 &5042454424574018572 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3405362657774256835, guid: 706ea26d9202d9d47b75e67b4d0d85f5, type: 3}
+  m_PrefabInstance: {fileID: 5042454424574018571}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

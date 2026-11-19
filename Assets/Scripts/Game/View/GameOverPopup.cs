@@ -8,11 +8,13 @@ public class GameOverPopup : MonoBehaviour
     [SerializeField] private GameObject window;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Button restartButton;
+    [SerializeField] private Button nextLevelButton;
     [SerializeField] private Button menuButton;
 
     private void Awake()
     {
         restartButton.onClick.AddListener(() => controller.Restart());
+        nextLevelButton.onClick.AddListener(() => controller.NextLevel());
         menuButton.onClick.AddListener(() => controller.GoToMenu());
 
         controller.GameWon += OnGameWon;
@@ -51,12 +53,14 @@ public class GameOverPopup : MonoBehaviour
             text.text = "You Win!";
             text.color = Color.green;
             restartButton.gameObject.SetActive(false);
+            nextLevelButton.gameObject.SetActive(controller.HasNextLevel);
         }
         else
         {
             text.text = "Time is up";
             text.color = Color.red;
             restartButton.gameObject.SetActive(true);
+            nextLevelButton.gameObject.SetActive(false);
         }
 
         window.SetActive(true);

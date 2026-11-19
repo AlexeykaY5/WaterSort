@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 public class MenuView : MonoBehaviour
 {
-    public event Action<int> PlayClicked;
-
+    [SerializeField] private MenuController controller;
     [SerializeField] private LevelCardView cardPrefab;
     [SerializeField] private RectTransform cardsContainer;
     [SerializeField] private SnapScroll snapScroll;
@@ -14,28 +11,18 @@ public class MenuView : MonoBehaviour
     [SerializeField] private Button previousButton;
     [SerializeField] private Button playButton;
 
-    private ConfigDatabase configs;
-    private RecordStorage recordStorage;
-
-    [Inject]
-    public void Construct(ConfigDatabase configs, RecordStorage recordStorage)
-    {
-        this.configs = configs;
-        this.recordStorage = recordStorage;
-    }
-
     private void Awake()
     {
         nextButton.onClick.AddListener(() => snapScroll.SnapTo(snapScroll.CurrentIndex + 1));
         previousButton.onClick.AddListener(() => snapScroll.SnapTo(snapScroll.CurrentIndex - 1));
-        playButton.onClick.AddListener(() => PlayClicked?.Invoke(snapScroll.CurrentIndex));
+        playButton.onClick.AddListener(() => controller.Play(snapScroll.CurrentIndex));
     }
 
     private void Start()
     {
-        foreach (DifficultySettings difficulty in configs.Difficulties)
+        for(int i = 0; i < controller.LevelCount; i++)
         {
-            CreateCard(difficulty.DifficultyName, recordStorage.Load(difficulty.Id));
+            CreateCard(controller.GetLevelName(i), controller.GetRecord(i));
         }
     }
 

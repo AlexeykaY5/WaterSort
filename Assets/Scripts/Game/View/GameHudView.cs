@@ -1,49 +1,34 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 public class GameHudView : MonoBehaviour
 {
-    public event Action MenuClicked;
-
+    [SerializeField] private GameController controller;
     [SerializeField] private TextMeshProUGUI difficultyText;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private Button menuButton;
 
-    private IReadGameModel state;
-    private ConfigDatabase configs;
-    private LevelSelection levelSelection;
-    private int shownSeconds = -1;
-
-    [Inject]
-    public void Construct(IReadGameModel state, ConfigDatabase configs, LevelSelection levelSelection)
-    {
-        this.state = state;
-        this.configs = configs;
-        this.levelSelection = levelSelection;
-    }
-
     private void Awake()
     {
-        menuButton.onClick.AddListener(() => MenuClicked?.Invoke());
+        menuButton.onClick.AddListener(() => controller.GoToMenu());
+        controller.LevelStarted += OnLevelStarted;
+        controller.TimeChanged += OnTimeChanged;
+    }
+    
+    private void OnDestroy()
+    {
+        controller.LevelStarted -= OnLevelStarted;
+        controller.TimeChanged -= OnTimeChanged;
     }
 
-    private void Start()
+    private void OnLevelStarted()
     {
-        difficultyText.text = configs.GetDifficulty(levelSelection.SelectedId).DifficultyName;
+        difficultyText.text = controller.LevelName;
     }
 
-    private void Update()
+    private void OnTimeChanged(int seconds)
     {
-        int wholeSeconds = Mathf.CeilToInt(state.TimeLeft);
-        if (wholeSeconds == shownSeconds)
-        {
-            return;
-        }
-
-        shownSeconds = wholeSeconds;
-        timerText.text = TimeFormat.ToMinutesSeconds(state.TimeLeft);
+        timerText.text = TimeFormat.ToMinutesSeconds(seconds);
     }
 }

@@ -3,28 +3,25 @@ using Zenject;
 
 public class MenuController : MonoBehaviour
 {
-    [SerializeField] private MenuView menuView;
-
     private ConfigDatabase configs;
-    private LevelSelection levelSelection;
     private SceneLoader sceneLoader;
+    private RecordStorage recordStorage;
 
+    public int LevelCount => configs.Levels.Count;
+    public string GetLevelName(int index) => configs.GetLevelName(index);
+
+    public float? GetRecord(int index) => recordStorage.Load(configs.Levels[index].Id);
+    
     [Inject]
-    public void Construct(ConfigDatabase configs, LevelSelection levelSelection, SceneLoader sceneLoader)
+    public void Construct(ConfigDatabase configs, SceneLoader sceneLoader, RecordStorage recordStorage)
     {
         this.configs = configs;
-        this.levelSelection = levelSelection;
         this.sceneLoader = sceneLoader;
+        this.recordStorage = recordStorage;
     }
 
-    private void Awake()
+    public void Play(int index)
     {
-        menuView.PlayClicked += OnPlayClicked;
-    }
-
-    private void OnPlayClicked(int index)
-    {
-        levelSelection.Select(configs.Difficulties[index].Id);
-        sceneLoader.LoadGame();
+        sceneLoader.LoadGame(configs.Levels[index]);
     }
 }

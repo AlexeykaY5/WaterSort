@@ -1,17 +1,26 @@
 using UnityEngine.SceneManagement;
+using Zenject;
 
 public class SceneLoader
 {
     private const string MenuSceneName = "Menu";
     private const string GameSceneName = "Game";
 
-    public void LoadMenu()
+    private readonly ZenjectSceneLoader zenjectSceneLoader;
+
+    public SceneLoader(ZenjectSceneLoader zenjectSceneLoader)
     {
-        SceneManager.LoadScene(MenuSceneName);
+        this.zenjectSceneLoader = zenjectSceneLoader;
     }
 
-    public void LoadGame()
+    public void LoadMenu()
     {
-        SceneManager.LoadScene(GameSceneName);
+        zenjectSceneLoader.LoadScene(MenuSceneName);
+    }
+
+    public void LoadGame(LevelSettings settings)
+    {
+        zenjectSceneLoader.LoadScene(GameSceneName, LoadSceneMode.Single,
+                                     container => container.BindInstance(settings));
     }
 }

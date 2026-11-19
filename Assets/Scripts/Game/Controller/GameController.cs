@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Zenject;
 
 public class GameController : MonoBehaviour
@@ -14,42 +13,34 @@ public class GameController : MonoBehaviour
     public event Action GameLost;
 
     public IReadGameModel Model => model;
-    public string LevelName => settings.DifficultyName;
+    public string LevelName => configs.GetLevelName(levelIndex);
+    public bool HasNextLevel => levelIndex + 1 < configs.Levels.Count;
 
-    [SerializeField] private GameHudView gameHudView;
-
+    private ConfigDatabase configs;
     private GameModel model;
     private RecordStorage recordStorage;
-    private ConfigDatabase configs;
-    private LevelSelection levelSelection;
     private SceneLoader sceneLoader;
     private ColorPalette palette;
-
-    private DifficultySettings settings;
-    private readonly System.Random random = new System.Random();
+    private LevelSettings settings;
+    private int levelIndex;
     private readonly HashSet<int> busyTubes = new HashSet<int>();
     private int shownSeconds = -1;
 
     [Inject]
-    public void Construct(GameModel model, RecordStorage recordStorage, ConfigDatabase configs,
-                          ColorPalette palette, LevelSelection levelSelection, SceneLoader sceneLoader)
+    public void Construct(GameModel model, RecordStorage recordStorage, LevelSettings settings,
+                          ConfigDatabase configs, ColorPalette palette, SceneLoader sceneLoader)
     {
         this.model = model;
         this.recordStorage = recordStorage;
+        this.settings = settings;
         this.configs = configs;
-        this.levelSelection = levelSelection;
         this.sceneLoader = sceneLoader;
         this.palette = palette;
-    }
-
-    private void Awake()
-    {
-        gameHudView.MenuClicked += GoToMenu;
+        levelIndex = configs.IndexOf(settings);
     }
 
     private void Start()
     {
-        settings = configs.GetDifficulty(levelSelection.SelectedId);
         StartGame();
     }
 
@@ -169,6 +160,7 @@ public class GameController : MonoBehaviour
             }
         }
 
+        System.Random random = new System.Random(settings.Seed);
         for (int i = colors.Count - 1; i > 0; i--)
         {
             int randomIndex = random.Next(0, i + 1);
@@ -304,15 +296,17 @@ public class GameController : MonoBehaviour
         return count;
     }
 
-        private void TryGiveBonus(int index)
+    private void TryGiveBonus(int index)
     {
         TubeModel tube = model.Tubes[index];
+
         if (!IsSingleColor(tube))
         {
             return;
         }
 
         string color = TopColor(tube);
+
         if (model.CompletedColors.Add(color))
         {
             model.TimeLeft += settings.BonusTime;
@@ -355,6 +349,12 @@ public class GameController : MonoBehaviour
             GameLost?.Invoke();
         }
     }
+
+    public void NextLevel()
+    {
+        sceneLoader.LoadGame(configs.Levels[levelIndex + 1]);
+    }
+
     public void GoToMenu()
     {
         sceneLoader.LoadMenu();

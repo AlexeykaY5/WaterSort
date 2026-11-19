@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69183310043c2f34abe1ff95f713d216, type: 3}
-  m_Name: HardSettings
-  m_EditorClassIdentifier: Assembly-CSharp::DifficultySettings
-  id: hard
-  numberOfColors: 8
+  m_Script: {fileID: 11500000, guid: 20559aebc239b6b43bf0edb2e8cc389c, type: 3}
+  m_Name: Level05
+  m_EditorClassIdentifier: Common::LevelSettings
+  id: level_05
+  seed: 505
+  numberOfColors: 6
   tubeCapacity: 4
   numberOfEmptyTubes: 2
-  timer: 180
+  timer: 130
   bonusTime: 30
-  difficultyName: Hard Level

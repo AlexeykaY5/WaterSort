@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DifficultySettings", menuName = "WaterSort/DifficultySettings")]
-public class DifficultySettings : ScriptableObject
+[CreateAssetMenu(fileName = "LevelSettings", menuName = "WaterSort/LevelSettings")]
+public class LevelSettings : ScriptableObject
 {
     [SerializeField] private string id = "";
-    [SerializeField] private string difficultyName;
+    [SerializeField] private int seed;
     [SerializeField] private int numberOfColors = 8;
     [SerializeField] private int tubeCapacity = 4;
     [SerializeField] private int numberOfEmptyTubes = 2;
@@ -12,7 +12,7 @@ public class DifficultySettings : ScriptableObject
     [SerializeField] private int bonusTime = 30;
 
     public string Id => id;
-    public string DifficultyName => difficultyName;
+    public int Seed => seed;
     public int ColorsCount => numberOfColors;
     public int TubeCapacity => tubeCapacity;
     public int EmptyTubeCount => numberOfEmptyTubes;

@@ -212,6 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a5b008919d2b6840a61d231b71f41fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
+  controller: {fileID: 1353702168}
   cardPrefab: {fileID: 5901152550547691641, guid: b5f8fa5e5df833f40907f9844f2251f6, type: 3}
   cardsContainer: {fileID: 1554280157}
   snapScroll: {fileID: 1811627454}
@@ -1079,7 +1080,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 478f462ca7d05324cad76bf6193c54b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuController
-  menuView: {fileID: 513696536}
 --- !u!4 &1353702169
 Transform:
   m_ObjectHideFlags: 0
@@ -1382,7 +1382,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe2132249fdc5ec45a0650d5c603b1f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnapScroll
-  scrollRect: {fileID: 1811627451}
   layout: {fileID: 1554280159}
   snapSpeed: 10
 --- !u!1 &1984635331

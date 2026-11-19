@@ -1,38 +1,46 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ConfigDatabase", menuName = "WaterSort/ConfigDatabase")]
 public class ConfigDatabase : ScriptableObject
 {
-    [SerializeField] private List<DifficultySettings> difficulties;
-    [SerializeField] private List<DifficultySettings> levels;
+    [SerializeField] private List<LevelSettings> levels;
 
-    public IReadOnlyList<DifficultySettings> Difficulties => difficulties;
+    public IReadOnlyList<LevelSettings> Levels => levels;
 
-    public DifficultySettings GetDifficulty(string id)
+    public string GetLevelName(int index) => $"Level {index + 1}";
+
+    public int IndexOf(LevelSettings level)
     {
-        DifficultySettings found = null;
-
-        foreach (DifficultySettings difficulty in difficulties)
+        int index = levels.IndexOf(level);
+        if(index == -1)
         {
-            if (difficulty.Id != id)
+            throw new KeyNotFoundException($"ConfigDatabase has no level '{level.name}'");
+        }
+
+        return index;
+    }
+
+    private void OnValidate()
+    {
+        if(levels == null)
+        {
+            return;
+        }
+
+        HashSet<string> ids = new HashSet<string>();
+
+        foreach(LevelSettings level in levels)
+        {
+            if(level == null)
             {
                 continue;
             }
 
-            if (found != null)
+            if (!ids.Add(level.Id))
             {
-                throw new InvalidOperationException($"ConfigDatabase has two difficulties with id '{id}'");
+                Debug.LogError($"ConfigDatabase has two levels with id '{level.Id}'", this);
             }
-            found = difficulty;
         }
-
-        if (found == null)
-        {
-            throw new KeyNotFoundException($"ConfigDatabase has no difficulty with id '{id}'");
-        }
-        return found;
     }
-
 }

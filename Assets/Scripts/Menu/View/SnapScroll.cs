@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(ScrollRect))]
 public class SnapScroll : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] private ScrollRect scrollRect;
+    private ScrollRect scrollRect;
     [SerializeField] private HorizontalLayoutGroup layout;
     [SerializeField] private float snapSpeed = 10f;
 
@@ -12,6 +13,11 @@ public class SnapScroll : MonoBehaviour, IBeginDragHandler, IEndDragHandler
     private float targetX;
 
     public int CurrentIndex { get; private set; }
+
+    private void Awake()
+    {
+        scrollRect = GetComponent<ScrollRect>();
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {

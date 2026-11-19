@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69183310043c2f34abe1ff95f713d216, type: 3}
-  m_Name: EasySettings
-  m_EditorClassIdentifier: Assembly-CSharp::DifficultySettings
-  id: easy
-  numberOfColors: 4
-  tubeCapacity: 3
+  m_Script: {fileID: 11500000, guid: 20559aebc239b6b43bf0edb2e8cc389c, type: 3}
+  m_Name: Level09
+  m_EditorClassIdentifier: Common::LevelSettings
+  id: level_09
+  seed: 909
+  numberOfColors: 9
+  tubeCapacity: 6
   numberOfEmptyTubes: 2
-  timer: 90
+  timer: 210
   bonusTime: 30
-  difficultyName: Easy Level

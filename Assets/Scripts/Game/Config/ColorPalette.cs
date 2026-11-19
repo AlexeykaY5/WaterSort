@@ -6,77 +6,63 @@ using UnityEngine;
 public class ColorPalette : ScriptableObject
 {
     [Serializable]
-    private struct Entry
+    private struct NamedColor
     {
         public string name;
         public Color color;
     }
 
-    [SerializeField] private Entry[] entries;
-
-    private Dictionary<string, Color> colorsByName;
+    [SerializeField] private NamedColor[] colors;
 
     private void OnValidate()
     {
-        for (int i = 0; i < entries.Length; i++)
+        if(colors == null)
         {
-            entries[i].color.a = 1f;
+            return;
         }
 
-        colorsByName = null;
+        HashSet<string> names = new HashSet<string>();
+
+        for (int i = 0; i < colors.Length; i++)
+        {
+            colors[i].color.a = 1f;
+
+            if (string.IsNullOrEmpty(colors[i].name))
+            {
+                Debug.LogError($"ColorPalette: Element {i} has no name", this);
+            }
+            else if (!names.Add(colors[i].name))
+            {
+                Debug.LogError($"ColorPalette has the color name '{colors[i].name}' twice");
+            }
+
+        }
     }
 
     public List<string> GetNames(int count)
     {
-        BuildIfNeeded();
-
-        if (count > entries.Length)
+        if (count > colors.Length)
         {
-            throw new ArgumentOutOfRangeException(nameof(count), $"ColorPalette has only {entries.Length} colors, but {count} are needed");
+            throw new ArgumentOutOfRangeException(nameof(count), $"ColorPalette has only {colors.Length} colors, but {count} are needed");
         }
 
         List<string> names = new List<string>();
         for (int i = 0; i < count; i++)
         {
-            names.Add(entries[i].name);
+            names.Add(colors[i].name);
         }
         return names;
     }
 
     public Color GetColor(string colorName)
-    {
-        BuildIfNeeded();
-
-        if (!colorsByName.TryGetValue(colorName, out Color color))
+    {   
+        foreach(NamedColor namedColor in colors)
         {
-            throw new KeyNotFoundException($"ColorPalette has no color named '{colorName}'");
-        }
-        return color;
-    }
-
-    private void BuildIfNeeded()
-    {
-        if (colorsByName != null)
-        {
-            return;
-        }
-
-        Dictionary<string, Color> result = new Dictionary<string, Color>();
-        foreach (Entry entry in entries)
-        {
-            if (string.IsNullOrEmpty(entry.name))
+            if(namedColor.name == colorName)
             {
-                throw new InvalidOperationException("ColorPalette has a color without a name");
+                return namedColor.color;
             }
-
-            if (result.ContainsKey(entry.name))
-            {
-                throw new InvalidOperationException($"ColorPalette has the color name '{entry.name}' twice");
-            }
-
-            result.Add(entry.name, entry.color);
         }
-
-        colorsByName = result;
+        throw new KeyNotFoundException($"ColorPalette has no color named '{colorName}'");
     }
 }
